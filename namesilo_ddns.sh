@@ -10,8 +10,13 @@ HOST="myhost"
 ##APIKEY obtained from Namesilo:
 APIKEY="c40031261ee449037a4b4"
 
+## Do not edit lines below ##
+
 ##Saved history pubic IP from last check
 IP_FILE="/var/log/MyPubIP"
+
+##Response from Namesilo
+RESPONSE="/tmp/namesilo_response.xml"
 
 ##Get the current public IP 
 CUR_IP=$(curl -s http://icanhazip.com)
@@ -36,7 +41,17 @@ if [ "$CUR_IP" != "$KNOWN_IP" ]; then
   ##Update DNS record in Namesilo:
   curl -s "https://www.namesilo.com/api/dnsListRecords?version=1&type=xml&key=$APIKEY&domain=$DOMAIN" > $DOMAIN.xml 
   RECORD_ID=`xmllint --xpath "//namesilo/reply/resource_record/record_id[../host/text() = '$HOST.$DOMAIN' ]" $DOMAIN.xml | grep -oP '(?<=<record_id>).*?(?=</record_id>)'`
-  curl -s "https://www.namesilo.com/api/dnsUpdateRecord?version=1&type=xml&key=$APIKEY&domain=$DOMAIN&rrid=$RECORD_ID&rrhost=$HOST&rrvalue=$CUR_IP&rrttl=7207"
+  curl -s "https://www.namesilo.com/api/dnsUpdateRecord?version=1&type=xml&key=$APIKEY&domain=$DOMAIN&rrid=$RECORD_ID&rrhost=$HOST&rrvalue=$CUR_IP&rrttl=7207" > $RESPONSE
+    RESPONSE_CODE=`xmllint --xpath "//namesilo/reply/code/text()"  $RESPONSE`
+       case $RESPONSE_CODE in
+       300)
+         logger -t IP.Check -- Update success. Now $HOST.$DOMAIN IP address is $CUR_IP;;
+       280)
+         logger -t IP.Check -- Duplicate record exist. No update necessary;;
+       *)
+         logger -t IP.Check -- DDNS update failed!;;
+     esac
+
 else
   logger -t IP.Check -- NO IP change
 fi
