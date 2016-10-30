@@ -18,8 +18,8 @@ IP_FILE="/var/log/MyPubIP"
 ##Response from Namesilo
 RESPONSE="/tmp/namesilo_response.xml"
 
-##Get the current public IP 
-CUR_IP=$(curl -s http://icanhazip.com)
+##Get the current public IP sing DNS
+CUR_IP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 
 ##Exit if curl failed
 if [ $? -ne 0 ]; then
