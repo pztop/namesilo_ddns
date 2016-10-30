@@ -22,31 +22,6 @@ RESPONSE="/tmp/namesilo_response.xml"
 RESOLVER=resolver$(echo "(($RANDOM%4)+1)"|bc).opendns.com
 ##Get the current public IP using DNS
 CUR_IP="$(dig +short myip.opendns.com @$RESOLVER.opendns.com)"
-
-#!/bin/bash
-
-##Domain name:
-DOMAIN="lazed.net"
-
-##Host name. 
-##If you want manage host "myhost.mydomain.tld", then
-HOST="cressida"
-
-##APIKEY obtained from Namesilo:
-APIKEY="ea1ff000e01f0db1832e"
-
-## Do not edit lines below ##
-
-##Saved history pubic IP from last check
-IP_FILE="/var/tmp/IP/MyPubIP"
-
-##Response from Namesilo
-RESPONSE="/tmp/namesilo_response.xml"
-
-##Choose which OpenDNS resolver to use
-RESOLVER=resolver$(echo "(($RANDOM%4)+1)"|bc).opendns.com
-##Get the current public IP 
-CUR_IP="$(dig +short myip.opendns.com @$RESOLVER)"
 ODRC=$?
 
 ## Try google dns if opendns failed
