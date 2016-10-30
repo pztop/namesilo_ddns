@@ -13,13 +13,15 @@ APIKEY="c40031261ee449037a4b4"
 ## Do not edit lines below ##
 
 ##Saved history pubic IP from last check
-IP_FILE="/var/log/MyPubIP"
+IP_FILE="/var/tmp/MyPubIP"
 
 ##Response from Namesilo
 RESPONSE="/tmp/namesilo_response.xml"
 
-##Get the current public IP sing DNS
-CUR_IP="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+##Choose randomly which OpenDNS resolver to use
+RESOLVER=resolver$(echo "(($RANDOM%4)+1)"|bc).opendns.com
+##Get the current public IP using DNS
+CUR_IP="$(dig +short myip.opendns.com @$RESOLVER.opendns.com)"
 
 ##Exit if curl failed
 if [ $? -ne 0 ]; then
