@@ -15,21 +15,27 @@ APIKEY="c40031261ee449037a4b4"
 ##Saved history pubic IP from last check
 IP_FILE="/var/tmp/MyPubIP"
 
+##Time IP last updated or 'No IP change' log message output
+IP_TIME="/var/tmp/MyIPTime"
+
+##How often to output 'No IP change' log messages
+NO_IP_CHANGE_TIME=86400
+
 ##Response from Namesilo
 RESPONSE="/tmp/namesilo_response.xml"
 
 ##Choose randomly which OpenDNS resolver to use
-RESOLVER=resolver$(echo "(($RANDOM%4)+1)"|bc).opendns.com
+RESOLVER=resolver$(echo $((($RANDOM%4)+1))).opendns.com
 ##Get the current public IP using DNS
-CUR_IP="$(dig +short myip.opendns.com @$RESOLVER.opendns.com)"
+CUR_IP="$(dig +short myip.opendns.com @$RESOLVER)"
 ODRC=$?
 
 ## Try google dns if opendns failed
 if [ $ODRC -ne 0 ]; then
    logger -t IP.Check -- IP Lookup at $RESOLVER failed!
    sleep 5
-##Choose which Google resolver to use
-   RESOLVER=ns$(echo "(($RANDOM%4)+1)"|bc).google.com
+##Choose randomly which Google resolver to use
+   RESOLVER=ns$(echo $((($RANDOM%4)+1))).google.com
 ##Get the current public IP 
    IPQUOTED=$(dig TXT +short o-o.myaddr.l.google.com @$RESOLVER)
    GORC=$?
@@ -60,15 +66,21 @@ if [ "$CUR_IP" != "$KNOWN_IP" ]; then
     RESPONSE_CODE=`xmllint --xpath "//namesilo/reply/code/text()"  $RESPONSE`
        case $RESPONSE_CODE in
        300)
+         date "+%s" > $IP_TIME
          logger -t IP.Check -- Update success. Now $HOST.$DOMAIN IP address is $CUR_IP;;
        280)
          logger -t IP.Check -- Duplicate record exists. No update necessary;;
        *)
-         logger -t IP.Check -- DDNS update failed!;;
+         ## put the old IP back, so that the update will be tried next time
+         echo $KNOWN_IP > $IP_FILE
+         logger -t IP.Check -- DDNS update failed code $RESPONSE_CODE!;;
      esac
 
 else
-  logger -t IP.Check -- NO IP change from $RESOLVER
+  ## Only log all these events NO_IP_CHANGE_TIME after last update
+  [ $(date "+%s") -gt $((($(cat $IP_TIME)+$NO_IP_CHANGE_TIME))) ] &&
+    logger -t IP.Check -- NO IP change from $RESOLVER &&
+    date "+%s" > $IP_TIME
 fi
 
 exit 0
