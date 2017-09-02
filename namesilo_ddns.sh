@@ -66,7 +66,7 @@ if [ "$CUR_IP" != "$KNOWN_IP" ]; then
        case $RESPONSE_CODE in
        300)
          date "+%s" > $IP_TIME
-         logger -t IP.Check -- Update success. Now $HOST.$DOMAIN IP address is $CUR_IP;;
+         logger -t IP.Check -- Update success. Now $HOST$DOMAIN IP address is $CUR_IP;;
        280)
          logger -t IP.Check -- Duplicate record exists. No update necessary;;
        *)
