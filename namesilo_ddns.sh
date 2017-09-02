@@ -3,9 +3,8 @@
 ##Domain name:
 DOMAIN="mydomain.tld"
 
-##Host name. 
-##If you want manage host "myhost.mydomain.tld", then
-HOST="myhost"
+##Host name (subdomain). Optional. If present, must end with a dot (.)
+HOST="subdomain."
 
 ##APIKEY obtained from Namesilo:
 APIKEY="c40031261ee449037a4b4"
@@ -61,7 +60,7 @@ if [ "$CUR_IP" != "$KNOWN_IP" ]; then
 
   ##Update DNS record in Namesilo:
   curl -s "https://www.namesilo.com/api/dnsListRecords?version=1&type=xml&key=$APIKEY&domain=$DOMAIN" > $DOMAIN.xml 
-  RECORD_ID=`xmllint --xpath "//namesilo/reply/resource_record/record_id[../host/text() = '$HOST.$DOMAIN' ]" $DOMAIN.xml | grep -oP '(?<=<record_id>).*?(?=</record_id>)'`
+  RECORD_ID=`xmllint --xpath "//namesilo/reply/resource_record/record_id[../host/text() = '$HOST$DOMAIN' ]" $DOMAIN.xml | grep -oP '(?<=<record_id>).*?(?=</record_id>)'`
   curl -s "https://www.namesilo.com/api/dnsUpdateRecord?version=1&type=xml&key=$APIKEY&domain=$DOMAIN&rrid=$RECORD_ID&rrhost=$HOST&rrvalue=$CUR_IP&rrttl=3600" > $RESPONSE
     RESPONSE_CODE=`xmllint --xpath "//namesilo/reply/code/text()"  $RESPONSE`
        case $RESPONSE_CODE in
