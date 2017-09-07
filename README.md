@@ -10,10 +10,14 @@ Tested in Fedora 23, CentOS 7 and Ubuntu 14.04+.
 * Generate API key in the “api manager” at Namesilo
 
 * Make sure your system have command `dig` and `xmllint`. If not, install them:
+
 on CentOS:
-    ```sudo yum install bind-utils libxml2```
+
+```sudo yum install bind-utils libxml2```
+    
 on Ubuntu/Debian:
-    ```sudo apt-get install dnsutils libxml2-utils```
+
+```sudo apt-get install dnsutils libxml2-utils```
 
 ## How to use:
 * Download and save the Bash script.
