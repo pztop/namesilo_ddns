@@ -26,7 +26,7 @@ on Ubuntu/Debian:
 * Create cronjob (optional)
 
 ## Manual test:
-You should test the script to verify that is actually can update the DNS record at Namesilo. 
+You should test the script to verify that actually can update the DNS record at Namesilo. 
 
 Step 1: Create an A record in DNS Manager at Namesilo. Set it to a random IP address (not the same public IP of yours). For example:
 
