@@ -79,7 +79,8 @@ if [ "$CUR_IP" != "$KNOWN_IP" ]; then
          ## put the old IP back, so that the update will be tried next time
          echo $KNOWN_IP > $IP_FILE
          logger -t IP.Check -- DDNS update failed code $RESPONSE_CODE!;;
-     esac
+    esac
+  done
 
 else
   ## Only log all these events NO_IP_CHANGE_TIME after last update
