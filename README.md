@@ -1,3 +1,7 @@
+# Announcement (2017-12-21)
+I no longer use Namesilo's DNS service so I cannot help any issue for this script.
+
+-----------------------------------------------------------------
 # namesilo_ddns
 Dynamic DNS record update with NameSilo. 
 
