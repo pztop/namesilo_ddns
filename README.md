@@ -25,7 +25,7 @@ on Ubuntu/Debian:
 
 ## How to use:
 * Download and save the Bash script.
-* Modify the script, set “DOMAIN”, “HOST”, and “APIKEY” at the beginning of the script.
+* Modify the script, set “DOMAINS” and “APIKEY” at the beginning of the script.
 * Set file permission to make it executable.
 * Create cronjob (optional)
 
