@@ -1,3 +1,10 @@
+## alphazelaot 2200411
+
+The original version is to compare the current IP to the last script-run result which stored in the MyPubIP file.
+However, in some circumstances, it may leads unexpected result.
+Now, I compare the IP registered in the DNS to the current public IP for the direct result.
+==================================================================================
+
 # Announcement (2017-12-21)
 I no longer use Namesilo's DNS service so I cannot help any issue for this script.
 
