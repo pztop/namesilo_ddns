@@ -1,30 +1,43 @@
 #!/bin/bash
 
+
+#note
+#apt-get install libxml2-utils
+#apt-get install dnsutils
+
+#note: dig -4 TXT +short o-o.myaddr.l.google.com @ns1.google.com
+#note: dig +short myip.opendns.com @resolver1.opendns.com
+# two ways to get WAN ip
 ##Domain name:
-DOMAIN="mydomain.tld"
+DOMAIN="domain.com"
 
 ##Host name (subdomain). Optional. If present, must end with a dot (.)
-HOST="subdomain"
+HOST="sub_domain"
 
 ##APIKEY obtained from Namesilo:
-APIKEY="c40031261ee449037a4b4"
+APIKEY="key"
 
 ## Do not edit lines below ##
 
+if [ ! -d "/home/tmp" ]; then
+	echo "mkdir -p /home/tmp"
+	mkdir -p /home/tmp
+fi
+
 ##Saved history pubic IP from last check
-IP_FILE="/var/tmp/MyPubIP"
+IP_FILE="/home/tmp/MyPubIP${HOST}"
 
 ##Time IP last updated or 'No IP change' log message output
-IP_TIME="/var/tmp/MyIPTime"
+IP_TIME="/home/tmp/MyIPTime${HOST}"
 
 ##How often to output 'No IP change' log messages
 NO_IP_CHANGE_TIME=86400
 
 ##Response from Namesilo
-RESPONSE="/tmp/namesilo_response.xml"
+RESPONSE="/home/tmp/namesilo_response.xml"
 
 ##Choose randomly which OpenDNS resolver to use
-RESOLVER=resolver$(echo $((($RANDOM%4)+1))).opendns.com
+RESOLVER=resolver$(echo $((($RANDOM%3)+1))).opendns.com
 ##Get the current public IP using DNS
 CUR_IP="$(dig +short myip.opendns.com @$RESOLVER)"
 ODRC=$?
@@ -34,7 +47,7 @@ if [ $ODRC -ne 0 ]; then
    logger -t IP.Check -- IP Lookup at $RESOLVER failed!
    sleep 5
 ##Choose randomly which Google resolver to use
-   RESOLVER=ns$(echo $((($RANDOM%4)+1))).google.com
+   RESOLVER=ns$(echo $((($RANDOM%3)+1))).google.com
 ##Get the current public IP 
    IPQUOTED=$(dig TXT +short o-o.myaddr.l.google.com @$RESOLVER)
    GORC=$?
