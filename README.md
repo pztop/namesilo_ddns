@@ -1,4 +1,9 @@
+# Update(2021-7-2)
+
+Use `curl ipify.org` to query ip, in the beginning, create two empty tmp file to avoid occurs error。
+
 # Announcement (2017-12-21)
+
 I no longer use Namesilo's DNS service so I cannot help any issue for this script.
 
 -----------------------------------------------------------------
