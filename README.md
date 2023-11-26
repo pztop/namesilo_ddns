@@ -23,6 +23,10 @@ on Ubuntu/Debian:
 
 ```sudo apt-get install dnsutils libxml2-utils```
 
+on Openwrt:
+
+```opkg install bind-dig libxml2-utils grep```
+
 ## How to use:
 * Download and save the Bash script.
 * Modify the script, set “DOMAIN”, “HOST”, and “APIKEY” at the beginning of the script.
